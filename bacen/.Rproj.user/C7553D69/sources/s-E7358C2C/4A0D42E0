@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1513344406924.000,
+    "dirty" : false,
+    "encoding" : "ISO8859-1",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4A0D42E0",
+    "lastKnownWriteTime" : 1512395076,
+    "last_content_update" : 1512395076,
+    "path" : "C:/Users/lbruscato/Desktop/BACEN Project/bacen/R/bacen.R",
+    "project_path" : "R/bacen.R",
+    "properties" : {
+        "cursorPosition" : "55,58",
+        "scrollLine" : "45"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

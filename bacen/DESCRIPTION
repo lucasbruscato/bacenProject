@@ -1,0 +1,13 @@
+Package: bacen
+Type: Package
+Title: bacen
+Version: 0.1.0
+Published: 2017-12-01
+Author: Lucas Peinado Bruscato
+Maintainer: Lucas Peinado Bruscato <lucas.bruscato@gmail.com>
+Description: Package contemplates a function that transfer dataframes from R to Vertica-SQL, already creating the table structure on Vertica
+Encoding: UTF-8
+LazyData: true
+Imports:
+  RJDBC
+RoxygenNote: 6.0.1
