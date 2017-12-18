@@ -1,0 +1,5 @@
+"id";"id_maior";"id_decimal";"nome";"data";"data_timestamp";"text_com_valor_na";"num_com_valor_na"
+"1";1001;1.001e+09;1001.0001;"Lucas P Bruscato";"02/02/2017";"02/02/2017";"a";1
+"2";1002;1.002e+09;1002.0002;"Felipe B Siola";"02/02/2017";"02/02/2017";"b";NA
+"3";1003;1.003e+09;1003.0003;"Sergio Reis";"02/02/2017";"02/02/2017";"";3
+"4";1004;1.004e+09;1004.0004;"Adilson Koufioury";"02/02/2017";"02/02/2017";"d";4
