@@ -1,13 +1,17 @@
 Package: bacen
 Type: Package
 Title: bacen
-Version: 0.1.0
-Published: 2017-12-01
+Version: 1.3.1
+Published: 2018-01-04
 Author: Lucas Peinado Bruscato
 Maintainer: Lucas Peinado Bruscato <lucas.bruscato@gmail.com>
-Description: Package contemplates a function that transfer dataframes from R to Vertica-SQL, already creating the table structure on Vertica
+Description: Package contemplates functions that manipulates (sql operations) and send dataframes to Vertica and Oracle databases.
 Encoding: UTF-8
 LazyData: true
 Imports:
-  RJDBC
+  utils,
+  RJDBC, 
+  ROracle,
+  infuser
 RoxygenNote: 6.0.1
+License: MIT + file LICENSE
