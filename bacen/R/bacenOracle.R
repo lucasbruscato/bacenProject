@@ -65,7 +65,8 @@ roracle <- function(dataframe,
                     sid = getOption("bacen.oracle.sid"),
                     user = getOption("bacen.oracle.user"),
                     password = getOption("bacen.oracle.password"),
-                    useSQLldr = TRUE) {
+                    useSQLldr = TRUE,
+                    flag_append = FALSE) {
 
   if(is.null(dataframe)) {
     stop("Dataframe must not be NULL")
@@ -83,36 +84,75 @@ roracle <- function(dataframe,
 
   .iniParametersOracle(hostName = hostName, port = port, sid = sid, user = user, password = password)
 
-  if(!useSQLldr || !file.exists(getOption("bacen.oracle.sqlldr"))) {
-    message('SQLldr not found. Verify installation and path in getOption("bacen.oracle.sqlldr"), the transfer will proceed with "ROracle::dbWriteTable"')
-    oracleConn <- DBI::dbConnect(bacen_driver, bacen_user, bacen_password, dbname = bacen_connStr)
-    ROracle::dbWriteTable(conn = oracleConn, name = tableName, value = dataframe)
-    ROracle::dbDisconnect(oracleConn)
+  if(flag_append == FALSE){
+    if(!useSQLldr || !file.exists(getOption("bacen.oracle.sqlldr"))) {
+      message('SQLldr not found. Verify installation and path in getOption("bacen.oracle.sqlldr"), the transfer will proceed with "ROracle::dbWriteTable"')
+      oracleConn <- DBI::dbConnect(bacen_driver, bacen_user, bacen_password, dbname = bacen_connStr)
+      ROracle::dbWriteTable(conn = oracleConn, name = tableName, value = dataframe)
+      ROracle::dbDisconnect(oracleConn)
+    } else {
+      pathToTempFile <- paste0(tempdir(), "\\bacenTransferTemporaryTable.csv")
+      pathToTempFileCtl <- paste0(tempdir(), "\\bacenTransferTemporaryFile.ctl")
+      pathToTempFileLog <- paste0(tempdir(), "\\bacenTransferTemporaryFile.log")
+      pathToTempFileBad <- paste0(tempdir(), "\\bacenTransferTemporaryFile.bad")
+
+      .exportDataframeToCSV(df = dataframe, path = pathToTempFile, col.names = FALSE)
+      .createTableOracle(df = dataframe, schemaName = schemaName, tableName = tableName)
+      .transferTempFileToOracle(hostName = hostName,
+                                port = port,
+                                sid = sid,
+                                schemaName = schemaName,
+                                tableName = tableName,
+                                user = user,
+                                password = password,
+                                pathToTempFile = pathToTempFile,
+                                pathToTempFileCtl = pathToTempFileCtl,
+                                pathToTempFileLog = pathToTempFileLog,
+                                pathToTempFileBad = pathToTempFileBad,
+                                columnsTypes <- sapply(dataframe, class))
+
+      .rmTempFile(pathToTempFile)
+      .rmTempFile(pathToTempFileCtl)
+      .rmTempFile(pathToTempFileLog)
+      .rmTempFile(pathToTempFileBad)
+    }
+
   } else {
-    pathToTempFile <- paste0(tempdir(), "\\bacenTransferTemporaryTable.csv")
-    pathToTempFileCtl <- paste0(tempdir(), "\\bacenTransferTemporaryFile.ctl")
-    pathToTempFileLog <- paste0(tempdir(), "\\bacenTransferTemporaryFile.log")
-    pathToTempFileBad <- paste0(tempdir(), "\\bacenTransferTemporaryFile.bad")
 
-    .exportDataframeToCSV(df = dataframe, path = pathToTempFile, col.names = FALSE)
-    .createTableOracle(df = dataframe, schemaName = schemaName, tableName = tableName)
-    .transferTempFileToOracle(hostName = hostName,
-                              port = port,
-                              sid = sid,
-                              schemaName = schemaName,
-                              tableName = tableName,
-                              user = user,
-                              password = password,
-                              pathToTempFile = pathToTempFile,
-                              pathToTempFileCtl = pathToTempFileCtl,
-                              pathToTempFileLog = pathToTempFileLog,
-                              pathToTempFileBad = pathToTempFileBad,
-                              columnsTypes <- sapply(dataframe, class))
 
-    .rmTempFile(pathToTempFile)
-    .rmTempFile(pathToTempFileCtl)
-    .rmTempFile(pathToTempFileLog)
-    .rmTempFile(pathToTempFileBad)
+
+
+      oracleConn <- DBI::dbConnect(bacen_driver, bacen_user, bacen_password, dbname = bacen_connStr)
+
+      try({
+        ROracle::dbGetQuery(oracleConn, paste0("DROP TABLE ",schemaName,".",tableName,"__UNI "))
+      },silent = TRUE)
+
+      try({
+        ROracle::dbGetQuery(oracleConn, paste0("DROP TABLE ",schemaName,".",tableName,"__TEMP "))
+      },silent = TRUE)
+
+      ROracle::dbWriteTable(conn = oracleConn, name = paste0(tableName,"__TEMP"), value = dataframe)
+
+
+
+      result <- ROracle::dbGetQuery(oracleConn, paste0("CREATE TABLE ",schemaName,".",tableName,"__UNI AS
+                                                       SELECT * FROM ",schemaName,".",tableName,"
+                                                       UNION ALL
+                                                       SELECT * FROM ",schemaName,".",tableName,"__TEMP "
+                                                       ))
+
+
+      result <- ROracle::dbGetQuery(oracleConn, paste0("DROP TABLE ",schemaName,".",tableName," "))
+
+
+      result <- ROracle::dbGetQuery(oracleConn, paste0("CREATE TABLE ",schemaName,".",tableName," AS
+                                                        SELECT * FROM ",schemaName,".",tableName,"__UNI "))
+
+      result <- ROracle::dbGetQuery(oracleConn, paste0("DROP TABLE ",schemaName,".",tableName,"__UNI "))
+
+      result <- ROracle::dbGetQuery(oracleConn, paste0("DROP TABLE ",schemaName,".",tableName,"__TEMP "))
+
   }
 
   dfNumLines <- nrow(dataframe)
@@ -128,4 +168,12 @@ roracle <- function(dataframe,
   }
 
   .rmParameters()
+}
+
+
+resetConnections <- function() {
+  conns <- DBI::dbListConnections(bacen_driver)
+  for(conn in conns) {
+    DBI::dbDisconnect(conn)
+  }
 }
