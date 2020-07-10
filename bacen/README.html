@@ -125,7 +125,7 @@ $(document).ready(function () {
 <h1>Instalação</h1>
 <pre><code>
 devtools::install_git(
-  &quot;https://stash.uol.intranet/scm/pds/pergamo.git&quot;,
+  &quot;repositorio aqui&quot;,
   subdir = &quot;bacen&quot;
 )
 
@@ -133,19 +133,20 @@ library(bacen)
 
 ## oracle
 options(&quot;bacen.oracle.sqlldr&quot; = &quot;C:/oracleClient/instantclient_12_2/sqlldr.exe&quot;)
-options(&quot;bacen.oracle.hostName&quot; = &quot;rpp.bd.intranet&quot;)
-options(&quot;bacen.oracle.port&quot; = 1521)
-options(&quot;bacen.oracle.sid&quot; = &quot;rpp.pagseguro&quot;)
-options(&quot;bacen.oracle.user&quot; = &quot;manut_shinny&quot;)
-options(&quot;bacen.oracle.password&quot; = &quot;shinnymanut&quot;)
-options(&quot;bacen.oracle.schemaName&quot; = &quot;manut_shinny&quot;)
+options(&quot;bacen.oracle.hostName&quot; = &quot;hostname&quot;)
+options(&quot;bacen.oracle.port&quot; = port_int)
+options(&quot;bacen.oracle.sid&quot; = &quot;sid&quot;)
+options(&quot;bacen.oracle.user&quot; = &quot;user&quot;)
+options(&quot;bacen.oracle.password&quot; = &quot;password&quot;)
+options(&quot;bacen.oracle.schemaName&quot; = &quot;schema&quot;)
 
 ## vertica
-options(&quot;bacen.vertica.hostName&quot; = &quot;a1-zueira1&quot;)
-options(&quot;bacen.vertica.port&quot; = 5433)
-options(&quot;bacen.vertica.databaseName&quot; = &quot;okane&quot;)
-options(&quot;bacen.vertica.user&quot; = Sys.getenv(&quot;USERNAME&quot;))
-options(&quot;bacen.vertica.password&quot; = &quot;a&quot;)
+options(&quot;bacen.oracle.hostName&quot; = &quot;hostname&quot;)
+options(&quot;bacen.oracle.port&quot; = port_int)
+options(&quot;bacen.oracle.sid&quot; = &quot;sid&quot;)
+options(&quot;bacen.oracle.user&quot; = &quot;user&quot;)
+options(&quot;bacen.oracle.password&quot; = &quot;password&quot;)
+options(&quot;bacen.oracle.schemaName&quot; = &quot;schema&quot;)
 </code></pre>
 </div>
 

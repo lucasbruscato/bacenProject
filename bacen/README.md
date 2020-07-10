@@ -3,7 +3,7 @@
 ```
 
 devtools::install_git(
-  "https://stash.uol.intranet/scm/pds/pergamo.git",
+  "repositorio aqui",
   subdir = "bacen"
 )
 
@@ -12,23 +12,23 @@ library(bacen)
 # Oracle Okane
 setOracleOkaneParameters <- function() {
   options("bacen.oracle.sqlldr" = "C:/oracleClient/instantclient_12_2/sqlldr.exe")
-  options("bacen.oracle.hostName" = "rpp.bd.intranet")
-  options("bacen.oracle.port" = 1521)
-  options("bacen.oracle.sid" = "rpp.pagseguro")
-  options("bacen.oracle.user" = "manut_shinny")
-  options("bacen.oracle.password" = "shinnymanut")
-  options("bacen.oracle.schemaName" = "manut_shinny")
+  options("bacen.oracle.hostName" = "hostname")
+  options("bacen.oracle.port" = port_int)
+  options("bacen.oracle.sid" = "sid")
+  options("bacen.oracle.user" = "user")
+  options("bacen.oracle.password" = "password")
+  options("bacen.oracle.schemaName" = "schema")
 }
 
 # Oracle Lake
 setOracleLakeParameters <- function() {
   options("bacen.oracle.sqlldr" = "C:/oracleClient/instantclient_12_2/sqlldr.exe")
-  options("bacen.oracle.hostName" = "lnm.bd.intranet")
-  options("bacen.oracle.port" = 1521)
-  options("bacen.oracle.sid" = "lnm.datascience.pagseguro")
-  options("bacen.oracle.user" = "lbruscato")
-  options("bacen.oracle.password" = "a")
-  options("bacen.oracle.schemaName" = "lbruscato")
+  options("bacen.oracle.hostName" = "hostname")
+  options("bacen.oracle.port" = port_int)
+  options("bacen.oracle.sid" = "sid")
+  options("bacen.oracle.user" = "user")
+  options("bacen.oracle.password" = "password")
+  options("bacen.oracle.schemaName" = "schema")
 }
 
 # Vertica
